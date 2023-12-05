@@ -11,6 +11,6 @@ namespace SpaceWeatherForecast.Data.DTO_s.Planet
     {
         [JsonIgnore]public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Temperature { get; set; }
+        public decimal Temprature { get; set; }
     }
 }

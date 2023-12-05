@@ -10,7 +10,7 @@ namespace SpaceWeatherForecast.Data.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Temperature { get; set; }
+        public decimal Temprature { get; set; }
         public int PlanetId { get; set; }
     }
 }

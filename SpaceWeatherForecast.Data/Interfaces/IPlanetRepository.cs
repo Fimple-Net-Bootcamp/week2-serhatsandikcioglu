@@ -9,11 +9,11 @@ namespace SpaceWeatherForecast.Data.Interfaces
 {
     public interface IPlanetRepository
     {
-        public List<Planet> GetAll(bool relational = false);
+        public List<Planet> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType);
         Planet GetById(int id);
         void Add(Planet planet);
         void Delete(int id);
         void Update(Planet planet);
-        public bool IsExist(int id);
+        bool IsExist(int id);
     }
 }

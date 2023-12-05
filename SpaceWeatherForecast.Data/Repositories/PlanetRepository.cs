@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SpaceWeatherForecast.Data.DataBase;
+using SpaceWeatherForecast.Data.DTO_s;
 using SpaceWeatherForecast.Data.Entities;
 using SpaceWeatherForecast.Data.Interfaces;
 using System;
@@ -27,21 +30,47 @@ namespace SpaceWeatherForecast.Data.Repositories
             _dbSet.Remove(GetById(id));
         }
 
-        public List<Planet> GetAll(bool relational = false)
+        public List<Planet> GetAll(int page , int size, decimal minTemprature, string? sort, string? sortType)
         {
-            if (relational == true)
+            IQueryable<Planet> query = _dbSet.AsQueryable();
+            if (minTemprature != null)
             {
-            return _dbSet.Include(x=>x.Satellites).ToList();
+                query = query.Where(t => t.Temprature >= minTemprature);
+            }
+            if (!string.IsNullOrWhiteSpace(sort))
+            {
+                switch (sort.ToLower())
+                {
+                    case "name":
+                        query = sortType == "desc" ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name);
+                        break;
+
+                    case "temprature":
+                        query = sortType == "desc" ? query.OrderByDescending(p => p.Temprature) : query.OrderBy(p => p.Temprature);
+                        break;
+
+                    default:
+                        query = query.OrderBy(p => p.Id);
+                        break;
+                }
             }
             else
             {
-                return _dbSet.ToList();
+                query = query.OrderBy(p => p.Id);
             }
+            int skipCount = (page - 1) * size;
+            query = query.Skip(skipCount).Take(size);
+            return query.ToList();
         }
 
         public Planet GetById(int id)
         {
-            return _dbSet.Find(id);
+            var planet = _dbSet.Find(id);
+            if (planet != null)
+            {
+                _dbSet.Entry(planet).Collection(p => p.Satellites).Load();
+            }
+            return planet;
         }   
 
         public void Update(Planet planet)

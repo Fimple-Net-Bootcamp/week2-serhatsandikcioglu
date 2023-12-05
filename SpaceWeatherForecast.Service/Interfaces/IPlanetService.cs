@@ -11,12 +11,12 @@ namespace SpaceWeatherForecast.Service.Interfaces
 {
     public interface IPlanetService
     {
-        List<Planet> GetAll(bool relational);
+        List<Planet> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType);
         Planet GetById(int id);
-        Planet Add(PlanetCreateDTO planet);
+        PlanetDTO Add(PlanetCreateDTO planet);
         void Delete(int id);
-        public void Update(PlanetUpdateDTO planet);
-        public bool IsExist(int id);
-        public void Patch(int id, JsonPatchDocument<Planet> patchDoc);
+        void Update(PlanetUpdateDTO planet);
+        bool IsExist(int id);
+        void Patch(int id, JsonPatchDocument<Planet> patchDoc);
     }
 }

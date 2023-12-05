@@ -9,10 +9,11 @@ namespace SpaceWeatherForecast.Data.Interfaces
 {
     public interface ISatelliteRepository
     {
-        List<Satellite> GetAll();
+        List<Satellite> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType);
         Satellite GetById(int id);
         void Add(Satellite satellite);
         void Delete(int id);
         void Update(Satellite satellite);
+        bool IsExist(int id);
     }
 }

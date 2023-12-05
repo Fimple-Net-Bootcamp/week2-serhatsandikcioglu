@@ -10,6 +10,6 @@ namespace SpaceWeatherForecast.Data.DTO_s.Planet
     public class PlanetCreateDTO
     {
         public string Name { get; set; }
-        public decimal Temperature { get; set; }
+        public decimal Temprature { get; set; }
     }
 }

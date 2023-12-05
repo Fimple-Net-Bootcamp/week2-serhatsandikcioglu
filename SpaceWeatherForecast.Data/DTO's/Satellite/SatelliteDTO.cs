@@ -9,8 +9,9 @@ namespace SpaceWeatherForecast.Data.DTO_s.Satellite
 {
     public class SatelliteDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Temperature { get; set; }
+        public decimal Temprature { get; set; }
         public int PlanetId { get; set; }
     }
 }

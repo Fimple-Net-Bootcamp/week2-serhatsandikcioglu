@@ -27,12 +27,13 @@ namespace SpaceWeatherForecast.Service.Services
         }
 
 
-        public Planet Add(PlanetCreateDTO planet)
+        public PlanetDTO Add(PlanetCreateDTO planetCreateDTO)
         {
-            Planet mappedPlanet = _mapper.Map<Planet>(planet);
-            _planetRepository.Add(mappedPlanet);
+            Planet planet = _mapper.Map<Planet>(planetCreateDTO);
+            _planetRepository.Add(planet);
             _unitOfWork.SaveChanges();
-            return mappedPlanet;
+            PlanetDTO planetDTO = _mapper.Map<PlanetDTO>(planet);
+            return planetDTO;
         }
 
         public void Delete(int id)
@@ -41,9 +42,9 @@ namespace SpaceWeatherForecast.Service.Services
             _unitOfWork.SaveChanges();
         }
 
-        public List<Planet> GetAll(bool relational)
+        public List<Planet> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
         {
-           return _planetRepository.GetAll(relational);
+           return _planetRepository.GetAll(page,size,minTemprature,sort,sortType);
         }
 
         public Planet GetById(int id)
@@ -53,20 +54,20 @@ namespace SpaceWeatherForecast.Service.Services
 
         public bool IsExist(int id)
         {
-           var result = _planetRepository.IsExist(id);
+           bool result = _planetRepository.IsExist(id);
             return result;
         }
 
-        public void Update(PlanetUpdateDTO planet)
+        public void Update(PlanetUpdateDTO planetUpdateDTO)
         {
-            var mappedPlanet = _mapper.Map<Planet>(planet);
-            _planetRepository.Update(mappedPlanet);
+            Planet planet = _mapper.Map<Planet>(planetUpdateDTO);
+            _planetRepository.Update(planet);
             _unitOfWork.SaveChanges();
         }
         public void Patch(int id, JsonPatchDocument<Planet> patchDoc)
         {
             //JsonPatchDocument<Planet> document = JsonConvert.DeserializeObject<JsonPatchDocument<Planet>>(patchDoc);
-            var planet = _planetRepository.GetById(id);
+            Planet planet = _planetRepository.GetById(id);
             patchDoc.ApplyTo(planet);
             _unitOfWork.SaveChanges();
         }
