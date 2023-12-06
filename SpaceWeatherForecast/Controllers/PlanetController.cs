@@ -21,31 +21,31 @@ namespace SpaceWeatherForecast.Controllers
         [HttpGet]
         public IActionResult GetAll([FromQuery] int page = 1, int size = 10, decimal minTemprature = 0, string? sort = "", string? sortType = "")
         {
-            List<Planet> planets = _planetService.GetAll(page , size,minTemprature,sort,sortType);
-            return Ok(planets);
+            List<PlanetDTO> planetDTOs = _planetService.GetAll(page , size,minTemprature,sort,sortType);
+            return Ok(planetDTOs);
         }
         [HttpGet("{id}/satellites")]
         public IActionResult GetById(int id)
         {
-            bool planetIsExist = _planetService.IsExist(id);
-            if (planetIsExist)
+            bool planetExist = _planetService.IsExist(id);
+            if (planetExist)
             {
-            Planet planet = _planetService.GetById(id);
-            return Ok(planet);
+            PlanetDTO planetDTO = _planetService.GetById(id);
+            return Ok(planetDTO);
             }
             return NotFound();
         }
         [HttpPost]
         public IActionResult Create(PlanetCreateDTO planetCreateDTO)
         {
-            PlanetDTO createdPlanet = _planetService.Add(planetCreateDTO);
-            return CreatedAtAction(nameof(GetById),new {id = createdPlanet.Id},createdPlanet);
+            PlanetDTO planetDTO = _planetService.Add(planetCreateDTO);
+            return CreatedAtAction(nameof(GetById),new {id = planetDTO.Id}, planetDTO);
         }
         [HttpPut("{id}")]
         public IActionResult Update(int id,PlanetUpdateDTO planetUpdateDTO)
         {
-            bool planetIsExist = _planetService.IsExist(id);
-            if (planetIsExist)
+            bool planetExist = _planetService.IsExist(id);
+            if (planetExist)
             {
                 planetUpdateDTO.Id = id;
                 _planetService.Update(planetUpdateDTO);
@@ -56,8 +56,8 @@ namespace SpaceWeatherForecast.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            bool planetIsExist = _planetService.IsExist(id);
-            if (planetIsExist)
+            bool planetExist = _planetService.IsExist(id);
+            if (planetExist)
             {
             _planetService.Delete(id);
             return NoContent();
@@ -67,8 +67,8 @@ namespace SpaceWeatherForecast.Controllers
         [HttpPatch("{id}")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Planet> patchDoc)
         {
-            bool planetIsExist = _planetService.IsExist(id);
-            if (planetIsExist)
+            bool planetExist = _planetService.IsExist(id);
+            if (planetExist)
             {
             _planetService.Patch(id,patchDoc);
             return Ok();

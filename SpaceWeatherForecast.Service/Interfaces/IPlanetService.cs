@@ -11,8 +11,8 @@ namespace SpaceWeatherForecast.Service.Interfaces
 {
     public interface IPlanetService
     {
-        List<Planet> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType);
-        Planet GetById(int id);
+        List<PlanetDTO> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType);
+        PlanetDTO GetById(int id);
         PlanetDTO Add(PlanetCreateDTO planet);
         void Delete(int id);
         void Update(PlanetUpdateDTO planet);

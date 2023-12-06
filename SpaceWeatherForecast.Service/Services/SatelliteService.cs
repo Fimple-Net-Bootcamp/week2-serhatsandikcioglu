@@ -43,14 +43,18 @@ namespace SpaceWeatherForecast.Service.Services
             _unitOfWork.SaveChanges();
         }
 
-        public List<Satellite> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
+        public List<SatelliteDTO> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
         {
-            return _satelliteRepository.GetAll(page, size, minTemprature, sort, sortType);
+            List<Satellite> satellites =  _satelliteRepository.GetAll(page, size, minTemprature, sort, sortType);
+            List<SatelliteDTO> satelliteDTOs = _mapper.Map<List<SatelliteDTO>>(satellites);
+            return satelliteDTOs;
         }
 
-        public Satellite GetById(int id)
+        public SatelliteDTO GetById(int id)
         {
-            return _satelliteRepository.GetById(id);
+            Satellite satellite =  _satelliteRepository.GetById(id);
+            SatelliteDTO satelliteDTO = _mapper.Map<SatelliteDTO>(satellite);
+            return satelliteDTO;
         }
 
         public bool IsExist(int id)

@@ -42,14 +42,18 @@ namespace SpaceWeatherForecast.Service.Services
             _unitOfWork.SaveChanges();
         }
 
-        public List<Planet> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
+        public List<PlanetDTO> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
         {
-           return _planetRepository.GetAll(page,size,minTemprature,sort,sortType);
+           List<Planet> planets =  _planetRepository.GetAll(page,size,minTemprature,sort,sortType);
+            List<PlanetDTO> planetDTOs = _mapper.Map<List<PlanetDTO>>(planets);
+            return planetDTOs;
         }
 
-        public Planet GetById(int id)
+        public PlanetDTO GetById(int id)
         {
-            return _planetRepository.GetById(id);
+            Planet planet =  _planetRepository.GetById(id);
+            PlanetDTO planetDTO = _mapper.Map<PlanetDTO>(planet);
+            return planetDTO;
         }
 
         public bool IsExist(int id)
