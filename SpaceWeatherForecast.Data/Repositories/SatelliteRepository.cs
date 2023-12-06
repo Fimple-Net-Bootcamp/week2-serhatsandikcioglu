@@ -2,6 +2,7 @@
 using SpaceWeatherForecast.Data.DataBase;
 using SpaceWeatherForecast.Data.Entities;
 using SpaceWeatherForecast.Data.Interfaces;
+using System.Linq.Dynamic.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,7 +29,7 @@ namespace SpaceWeatherForecast.Data.Repositories
             _dbSet.Remove(GetById(id));
         }
 
-        public List<Satellite> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
+        public List<Satellite> GetAll(int page, int size, decimal minTemprature, string? sort)
         {
             IQueryable<Satellite> query = _dbSet.AsQueryable();
             if (minTemprature != null)
@@ -37,24 +38,23 @@ namespace SpaceWeatherForecast.Data.Repositories
             }
             if (!string.IsNullOrWhiteSpace(sort))
             {
-                switch (sort.ToLower())
+                var sortParts = sort.Split(' ');
+
+                if (sortParts.Length == 2 && (sortParts[1].ToLower() == "asc" || sortParts[1].ToLower() == "desc"))
                 {
-                    case "name":
-                        query = sortType == "desc" ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name);
-                        break;
+                    string propertyName = sortParts[0].ToLower();
 
-                    case "temprature":
-                        query = sortType == "desc" ? query.OrderByDescending(p => p.Temprature) : query.OrderBy(p => p.Temprature);
-                        break;
+                    var validProperties = typeof(Planet).GetProperties().Select(p => p.Name.ToLower());
 
-                    default:
-                        query = query.OrderBy(p => p.Id);
-                        break;
+                    if (validProperties.Contains(propertyName))
+                    {
+                        query = query.AsQueryable().OrderBy(sort);
+                    }
+                    else
+                    {
+                        query = query.OrderBy(x => x.Id);
+                    }
                 }
-            }
-            else
-            {
-                query = query.OrderBy(p => p.Id);
             }
             int skipCount = (page - 1) * size;
             query = query.Skip(skipCount).Take(size);

@@ -9,7 +9,7 @@ namespace SpaceWeatherForecast.Data.Interfaces
 {
     public interface IPlanetRepository
     {
-        public List<Planet> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType);
+        public List<Planet> GetAll(int page, int size, decimal minTemprature, string? sort);
         Planet GetById(int id);
         void Add(Planet planet);
         void Delete(int id);

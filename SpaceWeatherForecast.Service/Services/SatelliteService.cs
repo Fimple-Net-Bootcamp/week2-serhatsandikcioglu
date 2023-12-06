@@ -43,9 +43,9 @@ namespace SpaceWeatherForecast.Service.Services
             _unitOfWork.SaveChanges();
         }
 
-        public List<SatelliteDTO> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
+        public List<SatelliteDTO> GetAll(int page, int size, decimal minTemprature, string? sort)
         {
-            List<Satellite> satellites =  _satelliteRepository.GetAll(page, size, minTemprature, sort, sortType);
+            List<Satellite> satellites =  _satelliteRepository.GetAll(page, size, minTemprature, sort);
             List<SatelliteDTO> satelliteDTOs = _mapper.Map<List<SatelliteDTO>>(satellites);
             return satelliteDTOs;
         }
@@ -59,8 +59,8 @@ namespace SpaceWeatherForecast.Service.Services
 
         public bool IsExist(int id)
         {
-            bool result = _satelliteRepository.IsExist(id);
-            return result;
+            bool satelliteExist = _satelliteRepository.IsExist(id);
+            return satelliteExist;
         }
 
         public void Patch(int id, JsonPatchDocument<Satellite> patchDoc)

@@ -42,9 +42,9 @@ namespace SpaceWeatherForecast.Service.Services
             _unitOfWork.SaveChanges();
         }
 
-        public List<PlanetDTO> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType)
+        public List<PlanetDTO> GetAll(int page, int size, decimal minTemprature, string? sort)
         {
-           List<Planet> planets =  _planetRepository.GetAll(page,size,minTemprature,sort,sortType);
+           List<Planet> planets =  _planetRepository.GetAll(page,size,minTemprature,sort);
             List<PlanetDTO> planetDTOs = _mapper.Map<List<PlanetDTO>>(planets);
             return planetDTOs;
         }
@@ -58,8 +58,8 @@ namespace SpaceWeatherForecast.Service.Services
 
         public bool IsExist(int id)
         {
-           bool result = _planetRepository.IsExist(id);
-            return result;
+           bool planetExist = _planetRepository.IsExist(id);
+            return planetExist;
         }
 
         public void Update(PlanetUpdateDTO planetUpdateDTO)
@@ -70,7 +70,6 @@ namespace SpaceWeatherForecast.Service.Services
         }
         public void Patch(int id, JsonPatchDocument<Planet> patchDoc)
         {
-            //JsonPatchDocument<Planet> document = JsonConvert.DeserializeObject<JsonPatchDocument<Planet>>(patchDoc);
             Planet planet = _planetRepository.GetById(id);
             patchDoc.ApplyTo(planet);
             _unitOfWork.SaveChanges();

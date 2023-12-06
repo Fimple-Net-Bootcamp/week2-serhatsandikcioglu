@@ -26,13 +26,13 @@ namespace SpaceWeatherForecast.Controllers
             _planetService = planetService;
         }
         [HttpGet]
-        public IActionResult GetAll([FromQuery] int page = 1, int size = 10, decimal minTemprature = 0, string? sort = "", string? sortType = "")
+        public IActionResult GetAll([FromQuery]  decimal minTemprature, string? sort, int page = 1, int size = 10)
         {
-            List<SatelliteDTO> satelliteDTOs = _satelliteService.GetAll(page, size, minTemprature, sort, sortType);
+            List<SatelliteDTO> satelliteDTOs = _satelliteService.GetAll(page, size, minTemprature, sort);
             return Ok(satelliteDTOs);
         }
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById( int id)
         {
             bool satelliteExist = _satelliteService.IsExist(id);
             if (satelliteExist)
@@ -43,13 +43,14 @@ namespace SpaceWeatherForecast.Controllers
             return NotFound();
         }
         [HttpPost]
-        public IActionResult Create(SatelliteCreateDTO satelliteCreateDTO)
+        public IActionResult Create([FromBody] SatelliteCreateDTO satelliteCreateDTO)
         {
             SatelliteDTO satalliteDTO = _satelliteService.Add(satelliteCreateDTO);
             return CreatedAtAction(nameof(GetById), new { id = satalliteDTO.Id }, satalliteDTO);
+
         }
         [HttpPut("{id}/planet/{planetId}")]
-        public IActionResult Update(int id,int planetId,SatelliteUpdateDTO satelliteUpdateDTO)
+        public IActionResult UpdatePlanet( int id, int planetId, [FromBody] SatelliteUpdateDTO satelliteUpdateDTO)
         {
             bool satelliteExist = _satelliteService.IsExist(id);
             bool planetExist = _planetService.IsExist(id);
@@ -62,8 +63,20 @@ namespace SpaceWeatherForecast.Controllers
             }
             return NotFound();
         }
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] SatelliteUpdateDTO satelliteUpdateDTO)
+        {
+            bool satelliteExist = _satelliteService.IsExist(id);
+            if (satelliteExist)
+            {
+                satelliteUpdateDTO.Id = id;
+                _satelliteService.Update(satelliteUpdateDTO);
+                return Ok();
+            }
+            return NotFound();
+        }
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete( int id)
         {
             bool satelliteExist = _satelliteService.IsExist(id);
             if (satelliteExist)
@@ -74,7 +87,7 @@ namespace SpaceWeatherForecast.Controllers
             return NotFound();
         }
         [HttpPatch("{id}")]
-        public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Satellite> patchDoc)
+        public IActionResult Patch( int id, [FromBody] JsonPatchDocument<Satellite> patchDoc)
         {
             bool satelliteExist = _satelliteService.IsExist(id);
             if (satelliteExist)

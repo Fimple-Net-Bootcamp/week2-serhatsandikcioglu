@@ -13,7 +13,7 @@ namespace SpaceWeatherForecast.Service.Interfaces
 {
     public interface ISatelliteService
     {
-        List<SatelliteDTO> GetAll(int page, int size, decimal minTemprature, string? sort, string? sortType);
+        List<SatelliteDTO> GetAll(int page, int size, decimal minTemprature, string? sort);
         SatelliteDTO GetById(int id);
         SatelliteDTO Add(SatelliteCreateDTO satellite);
         void Delete(int id);
